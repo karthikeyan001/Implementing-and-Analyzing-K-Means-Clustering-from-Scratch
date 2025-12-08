@@ -1,35 +1,28 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from kmeans import KMeans
-from silhouette import silhouette_score_numpy
+from kmeans_numpy import KMeans
+from silhouette_score_numpy import silhouette_score_numpy
 
-df = pd.read_csv("data.csv")
-X = df.values
+X = np.loadtxt("data.csv", delimiter=",", skiprows=1)
 
-Ks = range(2, 8)
-SSE = []
-SIL = []
+sse = []
+sil = []
+Ks = range(2, 11)
 
 for k in Ks:
-    model = KMeans(n_clusters=k)
-    model.fit(X)
+    km = KMeans(k=k).fit(X)
+    d = np.linalg.norm(X - km.centroids[km.labels_], axis=1)
+    sse.append(np.sum(d**2))
+    sil.append(silhouette_score_numpy(X, km.labels_))
 
-    SSE.append(model.inertia_)
-    SIL.append(silhouette_score_numpy(X, model.labels_))
+optimal_k_sil = Ks[sil.index(max(sil))]
 
-plt.plot(Ks, SSE, marker="o")
-plt.xlabel("K")
-plt.ylabel("SSE")
-plt.title("Elbow Method")
-plt.savefig("elbow.png")
-plt.close()
+print("Optimal K (Silhouette):", optimal_k_sil)
 
-plt.plot(Ks, SIL, marker="o")
-plt.xlabel("K")
-plt.ylabel("Silhouette Score")
-plt.title("Silhouette Analysis")
-plt.savefig("silhouette.png")
-plt.close()
+km = KMeans(k=optimal_k_sil).fit(X)
 
-print("Analysis completed.")
+plt.scatter(X[:, 0], X[:, 1], c=km.labels_)
+plt.scatter(km.centroids[:, 0], km.centroids[:, 1], marker='x', s=200)
+plt.savefig("final_clusters.png")
+
+print("Saved final_clusters.png")
