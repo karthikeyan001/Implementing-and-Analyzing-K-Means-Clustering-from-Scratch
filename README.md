@@ -1,70 +1,55 @@
+# K-Means From Scratch (NumPy Only)
 
-# K-Means From Scratch (Colab-Ready Project)
+## Overview
+This project implements the K-Means clustering algorithm entirely from scratch using only NumPy.  
+It includes:
 
-This project includes:
-- Pure NumPy KMeans implementation
-- Data generator (Gaussian blobs)
-- Analysis runner producing elbow and silhouette plots
+- Manual K-Means implementation  
+- SSE (Elbow) Analysis  
+- Silhouette Score (custom NumPy version)  
+- Automatic optimal K selection  
+- Final clustering visualization  
 
-## How to run in Google Colab
+---
 
+## Files Included
 
-1. Generate dataset:
-   !python generate_dataset.py
-2. Run analysis:
-   !python run_analysis.py
-3. View images:
-   from IPython.display import Image
-   Image('elbow.png')
+| File | Description |
+|------|-------------|
+| `kmeans_numpy.py` | Core K-Means algorithm (NumPy only) |
+| `silhouette_score_numpy.py` | Manual Silhouette Score implementation |
+| `run_analysis.py` | Runs full analysis, finds optimal K, generates plots |
+| `data.csv` | Dataset containing X and Y numeric columns |
 
-Implementing and Analyzing K-Means Clustering from Scratch
-________________________________________
-1. Introduction
-This project focuses on implementing the K-Means clustering algorithm manually using NumPy. The aim is to understand how the algorithm works internally and to analyze its behavior by running it on a synthetic two-dimensional dataset. The study includes dataset creation, clustering, evaluation of different values of K, and interpretation of results without relying on high-level machine learning libraries.
-________________________________________
-2. Dataset Generation
-A synthetic dataset was generated to allow controlled experimentation. Three Gaussian groups were created with the following characteristics:
-•	Total samples: 300
-•	Features: 2 (x and y)
-•	True underlying clusters: 3
-•	Standard deviation: 1.0
-The dataset was stored in a CSV file with two columns:
-•	x — Feature 1
-•	y — Feature 2
-These values do not represent real-world metrics. They are simply two-dimensional coordinates used to visualize clustering performance.
-________________________________________
-3. Methodology
-3.1 Data Preparation
-The dataset was loaded using pandas, checked for missing values, and converted into a NumPy array. Standardization was not required because all features share a similar scale.
-3.2 Manual K-Means Implementation
-The K-Means algorithm was implemented entirely using NumPy. The main components include:
-1.	Random selection of K initial centroids.
-2.	Distance computation using Euclidean distance.
-3.	Assignment of each data point to the nearest centroid.
-4.	Recalculation of centroids based on cluster membership.
-5.	Iteration until convergence or until a maximum number of iterations is reached.
-The implementation avoids any machine learning library and performs all operations using vectorized NumPy expressions.
-________________________________________
-4. Determining the Optimal Number of Clusters
-Two evaluation techniques were used to analyze the choice of K.
-4.1 Elbow Method
-The sum of squared errors (SSE) was calculated for K values from 2 to 7. The SSE decreases sharply up to K = 3. After that point, the improvement becomes small. This indicates that K = 3 is a natural balance between model complexity and accuracy.
-4.2 Silhouette Analysis
-The silhouette score was computed manually using only NumPy. The formula compares:
-•	The average distance between a point and others in its own cluster.
-•	The lowest average distance between the point and any other cluster.
-Scores were highest at K = 3, confirming the elbow method. Higher values of K caused unnecessary splitting, while lower values produced overly broad clusters.
-________________________________________
-5. Visualizations
-Scatter plots were generated to display cluster assignments and centroid positions. Additional plots were produced to show SSE values and silhouette scores across different K values. The visualizations clearly show well-separated cluster regions and validate the analytical findings.
-________________________________________
-6. Findings
-•	The dataset naturally forms three compact groups.
-•	Both evaluation methods support selecting K = 3.
-•	The algorithm converges in a small number of iterations due to the simplicity of the data.
-•	Increasing K increases computational cost without improving cluster quality.
-Overall, the experiment demonstrates the full K-Means workflow and confirms that careful selection of K is essential for producing meaningful clusters.
-________________________________________
-7. Conclusion
-A complete NumPy-only implementation of the K-Means algorithm was developed and tested on a synthetic dataset. The project includes dataset creation, clustering, evaluation of cluster quality, and visualization. The analysis consistently indicates that three clusters provide the best fit. This study reinforces fundamental concepts in unsupervised learning and demonstrates the internal mechanics of K-Means without relying on external machine learning libraries.
+---
 
+## How It Works
+
+### 1. K-Means Algorithm  
+Implemented manually without sklearn.
+
+### 2. Elbow & Silhouette Methods  
+Evaluates K from **2 to 10**, computes:
+
+- SSE
+- Silhouette Score
+
+### 3. Optimal K  
+The script selects the best K based on **maximum silhouette score**.
+
+### 4. Output  
+Running `run_analysis.py` will generate:
+
+- `final_clusters.png`
+- Printed optimal K values
+
+---
+
+## How to Run
+```
+python run_analysis.py
+```
+
+Make sure `data.csv` is in the same directory.
+
+---
